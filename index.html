@@ -1,0 +1,112 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>Icon Select</title>
+	<meta name="description" content="The HTML5 Herald">
+	<meta name="author" content="SitePoint">
+
+	<style>
+		i {
+			font-size: 50px;
+		}
+
+		option,
+		select {
+			font-family: 'Hialeah-icon' !important;
+			font-size: 32px;
+		}
+
+
+		.bigP {
+			font-family: sans-serif;
+			font-size: 4rem;
+			word-break: break-all;
+		}
+	</style>
+</head>
+
+<body>
+
+
+	<input type="text" id='color-picker' value="#bada55" />
+	<p class="bigP">This is a visible text always.</p>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+	<script src="iris.min.js"></script>
+
+	<script>
+		jQuery(document).ready(function($) {
+			$("body").css('background-color', $("#color-picker").val());
+			$('#color-picker').iris({
+				hide: false,
+				change: function(event, ui) {
+					// event = standard jQuery event, produced by whichever control was changed.
+					// ui = standard jQuery UI object, with a color member containing a Color.js object
+
+					// show RGB
+					$("p").css("color", hexToRgb(ui.color.toString()));
+					$("body").css('background-color', ui.color.toString());
+				}
+			});
+
+			console.log('rgb(' + hexToRgb('ffffff') + ')');
+
+		});
+
+		function hexToRgb(hexColor) {
+			hexColor = hexColor.replace('#', '');
+			var luminance = 0;
+			hexColor.match(/.{1,2}/g).map((intensity, index) => {
+
+				if (index == 0) {
+					var newIntensity = parseInt(intensity, 16);
+
+					if (newIntensity / 255 <= 0.03928) {
+						newIntensity = newIntensity / 12.92;
+					} else {
+						newIntensity = Math.pow((newIntensity + 0.055) / 1.055, 2.4);
+					}
+					var RsRGB = newIntensity;
+					luminance = luminance + (0.2126 * RsRGB);
+					console.log("R:" + RsRGB);
+					console.log(luminance);
+				} else if (index == 1) {
+					var newIntensity = parseInt(intensity, 16);
+
+					if (newIntensity / 255 <= 0.03928) {
+						newIntensity = newIntensity / 12.92;
+					} else {
+						newIntensity = Math.pow((newIntensity + 0.055) / 1.055, 2.4);
+					}
+					var GsRGB = newIntensity;
+					luminance = luminance + (0.7152 * GsRGB);
+					console.log("G:" + GsRGB);
+				} else {
+					var newIntensity = parseInt(intensity, 16);
+
+					if (newIntensity / 255 <= 0.03928) {
+						newIntensity = newIntensity / 12.92;
+					} else {
+						newIntensity = Math.pow((newIntensity + 0.055) / 1.055, 2.4);
+					}
+					var BsRGB = newIntensity;
+					luminance = luminance + (0.0722 * BsRGB);
+					console.log("B:" + BsRGB);
+				}
+			});
+			console.log("Lumi" + luminance);
+			if (luminance > 83000) {
+				return "#000";
+			} else {
+				return "#fff";
+			}
+
+		}
+	</script>
+</body>
+
+</html>
